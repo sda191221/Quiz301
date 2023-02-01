@@ -1,25 +1,31 @@
-import logo from './logo.svg';
+
+import { useState, useEffect } from 'react';
+import { ThemeProvider } from 'styled-components';
+import GlobalStyle, { lightTheme, darkTheme } from './globalStyles';
+import Quiz from './pages/Quiz/Quiz'
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
 
-export default App;
+
+export default function App() {
+
+  const [theme, setTheme] = useState("light");
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+  };
+  useEffect(() => {
+    localStorage.getItem("theme") === "dark"
+      ? setTheme("dark")
+      : setTheme("light");
+  }, []);
+
+  return (
+    <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
+      < GlobalStyle />
+      <Quiz toggleTheme={toggleTheme} />
+    </ ThemeProvider>
+
+  )
+}
